@@ -4,6 +4,7 @@ package com.ntg.recruitment.service;
 import com.ntg.recruitment.dto.AuthResponse;
 import com.ntg.recruitment.dto.LoginRequest;
 import com.ntg.recruitment.dto.RegisterRequest;
+import com.ntg.recruitment.entity.Role;
 import com.ntg.recruitment.entity.User;
 import com.ntg.recruitment.repo.UserRepository;
 import com.ntg.recruitment.security.JwtService;
@@ -34,7 +35,8 @@ public class AuthService {
         user.setEmail(req.getEmail());
         user.setUsername(req.getUsername());
         user.setPassword(encoder.encode(req.getPassword()));
-        user.setRole(req.getRole());
+        user.setRole(Role.CANDIDATE);
+
 
         userRepo.save(user);
     }
@@ -47,7 +49,7 @@ public class AuthService {
             throw new RuntimeException("Invalid credentials");
 
         String token = jwtService.generateToken(user);
-        return new AuthResponse(token, user.getRole().name());
+        return new AuthResponse(token, user.getUsername(),user.getEmail(),user.getRole().name());
     }
 }
 
