@@ -1,5 +1,6 @@
 package com.ntg.recruitment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,9 +16,10 @@ public class Status {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "status", fetch = FetchType.LAZY)
-    private List<User> users;
+    @JsonIgnore
+    private List<UserProcess> userProcesses;
+
 }

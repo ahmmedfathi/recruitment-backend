@@ -1,8 +1,12 @@
 package com.ntg.recruitment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Null;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -13,40 +17,37 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Email should be valid")
-    @Column(unique = true, nullable = false)
     private String email;
 
-    @NotBlank(message = "Username cannot be blank")
-    @Size(max = 50, message = "Username cannot exceed 50 characters")
     private String username;
+     private  String fullName;
+    private  String phoneNumber;
 
-    @NotBlank(message = "Password cannot be blank")
-    @Size(min = 8, max = 20, message = "Password must be between 8 and 20 characters")
-//    @Pattern(
-//            regexp = "^(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
-//            message = "Password must contain at least one uppercase letter and one special character"
-//    )
+    private Date birthDate;
+    private String University;
+    private String faculty;
+    private String department;
+    private int graduationYear;
     private String password;
 
-
     @Enumerated(EnumType.STRING)
-    private Role role = Role.CANDIDATE;
+    private Role role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "status_id")
-    private Status status;
 
-    @ManyToMany(mappedBy = "users")
-
-    private List<Position> positions;
 
     @OneToMany(mappedBy = "user")
-    private List<User_Process> User_Processes;
+    @JsonIgnore
+    private List<UserPosition> userPositions ;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<UserProcess> user_Processes;
+
+
+
 }
 
 

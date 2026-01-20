@@ -20,10 +20,13 @@ public class UserDetailsService implements org.springframework.security.core.use
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .roles(user.getRole().name())
-                .build();
+        return new CustomUserDetails(
+                user.getId(), // userId
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole() != null ?
+                        java.util.List.of(() -> "ROLE_" + user.getRole().name())
+                        : java.util.List.of()
+        );
     }
 }
